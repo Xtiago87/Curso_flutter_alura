@@ -14,10 +14,6 @@ class ContactDao {
     final Database db = await getDatabase();
     Map<String, dynamic> contactMap = toMap(contact);
     return db.insert(_tableName, contactMap);
-
-    // return createDatabase().then((db) {
-
-    // });
   }
 
   Map<String, dynamic> toMap(Contact contact) {

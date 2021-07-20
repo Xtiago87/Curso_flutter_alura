@@ -1,4 +1,4 @@
-import 'package:bytebank_sqlite/database/app_database.dart';
+
 import 'package:bytebank_sqlite/database/dao/contact_dao.dart';
 import 'package:bytebank_sqlite/models/contact.dart';
 import 'package:flutter/material.dart';

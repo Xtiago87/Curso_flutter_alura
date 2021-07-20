@@ -1,11 +1,13 @@
-import 'package:bytebank_sqlite/models/contact.dart';
 import 'package:bytebank_sqlite/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 
-import 'database/app_database.dart';
+
 
 void main() {
   runApp(MyApp());
+  // save(Transaction(274.0, Contact(0, "alexiu", 5000)))
+  //     .then((value) => print(value));
+  // findAll().then((value) => print("new transactions $value"));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +16,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        backgroundColor: Colors.amber,
           primaryColor: Colors.green[900],
           accentColor: Colors.blueAccent[700],
           buttonTheme: ButtonThemeData(
@@ -24,5 +25,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
