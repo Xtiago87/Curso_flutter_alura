@@ -1,13 +1,14 @@
+import 'package:bytebank_sqlite/components/transaction_auth_dialog.dart';
+import 'package:bytebank_sqlite/models/transaction.dart';
 import 'package:bytebank_sqlite/screens/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 
 
 void main() {
   runApp(MyApp());
-  // save(Transaction(274.0, Contact(0, "alexiu", 5000)))
-  //     .then((value) => print(value));
-  // findAll().then((value) => print("new transactions $value"));
+  print(Uuid().v4().characters);
 }
 
 class MyApp extends StatelessWidget {

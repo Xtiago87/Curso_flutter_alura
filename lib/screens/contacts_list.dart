@@ -29,7 +29,7 @@ class _ContactsListState extends State<ContactsList> {
             // TODO: Handle this case.
               break;
             case ConnectionState.waiting:
-              Progress();
+              Progress("Loading");
               break;
             case ConnectionState.active:
             // TODO: Handle this case.
