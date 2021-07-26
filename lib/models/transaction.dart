@@ -5,9 +5,9 @@ class Transaction {
   final double? value;
   final Contact contact;
 
-  Transaction(this.value,
+  Transaction(this.id,this.value,
       this.contact,
-      this.id,);
+      );
 
   Transaction.fromJson(Map<String, dynamic> json):
         id = json["id"],

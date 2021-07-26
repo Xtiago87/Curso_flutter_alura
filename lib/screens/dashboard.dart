@@ -1,5 +1,6 @@
 import 'package:bytebank_sqlite/screens/contacts_list.dart';
 import 'package:bytebank_sqlite/screens/transactions_list.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 
