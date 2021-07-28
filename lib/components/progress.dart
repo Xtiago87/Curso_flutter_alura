@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class Progress extends StatelessWidget {
   final String? message;
 
-
   Progress(this.message);
 
   @override
