@@ -1,18 +1,70 @@
+import 'package:bytebank_sqlite/components/container.dart';
 import 'package:bytebank_sqlite/components/progress.dart';
-
 import 'package:bytebank_sqlite/database/dao/contact_dao.dart';
 import 'package:bytebank_sqlite/models/contact.dart';
 import 'package:bytebank_sqlite/screens/contact_form.dart';
 import 'package:bytebank_sqlite/screens/transaction_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ContactsList extends StatefulWidget {
-  @override
-  _ContactsListState createState() => _ContactsListState();
+@immutable
+abstract class ContactsListState {
+  const ContactsListState();
 }
 
-class _ContactsListState extends State<ContactsList> {
-  final ContactDao _dao = ContactDao();
+@immutable
+class LoadingContactsListState extends ContactsListState {
+  const LoadingContactsListState();
+}
+
+@immutable
+class LoadedContactsListState extends ContactsListState {
+  final List<Contact> _contacts;
+
+  const LoadedContactsListState(this._contacts);
+}
+
+@immutable
+class InitContactsListState extends ContactsListState {
+  const InitContactsListState();
+}
+
+@immutable
+class FatalErrorContactsListState extends ContactsListState {
+  const FatalErrorContactsListState();
+}
+
+class ContactsListCubit extends Cubit<ContactsListState> {
+  ContactsListCubit() : super(InitContactsListState());
+
+  void reload(ContactDao dao) async {
+    emit(LoadingContactsListState());
+    dao.findAll().then((value) {
+      emit(LoadedContactsListState(value));
+    });
+  }
+}
+
+class ContactsListContainer extends BlocContainer {
+  final ContactDao dao = ContactDao();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ContactsListCubit>(
+      create: (BuildContext context) {
+        final cubit = ContactsListCubit();
+        cubit.reload(dao);
+        return cubit;
+      },
+      child: ContactsList(dao),
+    );
+  }
+}
+
+class ContactsList extends StatelessWidget {
+  final ContactDao _dao;
+
+  ContactsList(this._dao);
 
   @override
   Widget build(BuildContext context) {
@@ -20,55 +72,40 @@ class _ContactsListState extends State<ContactsList> {
       appBar: AppBar(
         title: Text("Contacts"),
       ),
-      body: FutureBuilder<List<Contact>>(
-        initialData: [],
-        future: _dao.findAll(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none: //ainda n foi executado
-            // TODO: Handle this case.
-              break;
-            case ConnectionState.waiting:
-              Progress("Loading");
-              break;
-            case ConnectionState.active:
-            // TODO: Handle this case.
-              break;
-            case ConnectionState.done:
-              final List<Contact>? contacts = snapshot
-                  .data; // usado null safe na lista pois é regra da nova versão do flutter
-              if (contacts != null) {
-                //feito if para validar nulo
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    final Contact contact = contacts[index];
-                    return _ContactItem(
-                      contact,
-                      onClick: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) =>
-                            TransactionForm(contact))
-                        );
-                      },
-                    );
-                  },
-                  itemCount: contacts.length,
-                );
-              }
-              break;
+      body: BlocBuilder<ContactsListCubit, ContactsListState>(
+        builder: (context, state) {
+          if (state is InitContactsListState ||
+              state is LoadingContactsListState) {
+            return Progress("Loading");
           }
-
-          return Container();
+          if (state is LoadedContactsListState) {
+            final List<Contact>? contacts = state
+                ._contacts; // usado null safe na lista pois é regra da nova versão do flutter
+            if (contacts != null) {
+              //feito if para validar nulo
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final Contact contact = contacts[index];
+                  return _ContactItem(
+                    contact,
+                    onClick: () {
+                      push(context, TransactionFormContainer(contact));
+                    },
+                  );
+                },
+                itemCount: contacts.length,
+              );
+            }
+          }
+          return const Text("Unknown error");
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ContactForm()))
-              .then((newContact) {
-            setState(() {});
-            debugPrint(newContact.toString());
-          });
+        onPressed: () async {
+          await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ContactForm(),
+          ));
+          context.read<ContactsListCubit>().reload(_dao);
         },
         child: Icon(Icons.add),
       ),
