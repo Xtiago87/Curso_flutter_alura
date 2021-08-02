@@ -76,7 +76,7 @@ class ContactsList extends StatelessWidget {
         builder: (context, state) {
           if (state is InitContactsListState ||
               state is LoadingContactsListState) {
-            return Progress("Loading");
+            return Progress(message: "Loading");
           }
           if (state is LoadedContactsListState) {
             final List<Contact>? contacts = state

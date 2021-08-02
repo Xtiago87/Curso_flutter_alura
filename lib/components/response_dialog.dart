@@ -4,13 +4,13 @@ class ResponseDialog extends StatelessWidget {
   final String title;
   final String message;
   final String buttonText;
-  final IconData icon;
+  final IconData? icon;
   final Color colorIcon;
 
   ResponseDialog({
     this.title = "",
     this.message = "",
-    required this.icon,
+    this.icon,
     this.buttonText = 'Ok',
     this.colorIcon = Colors.black,
   });
@@ -69,10 +69,10 @@ class SuccessDialog extends StatelessWidget {
   final IconData icon;
 
   SuccessDialog(
-      this.message, {
-        this.title = 'Success',
-        this.icon = Icons.done,
-      });
+    this.message, {
+    this.title = 'Success',
+    this.icon = Icons.done,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +91,10 @@ class FailureDialog extends StatelessWidget {
   final IconData icon;
 
   FailureDialog(
-      this.message, {
-        this.title = 'Failure',
-        this.icon = Icons.warning,
-      });
+    this.message, {
+    this.title = 'Failure',
+    this.icon = Icons.warning,
+  });
 
   @override
   Widget build(BuildContext context) {
