@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "295730204071",
+    "project_id": "alura-crashlytics-e653f",
+    "storage_bucket": "alura-crashlytics-e653f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295730204071:android:7a7c44d5dc269d0270fa82",
+        "android_client_info": {
+          "package_name": "br.com.tiago.bytebank_sqlite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295730204071-sieki1ek99hjfvsv06qlu6iem0ba2d0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIpWNmasKVQpe59RyrXQOuLhnVuDJfL2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295730204071-sieki1ek99hjfvsv06qlu6iem0ba2d0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
