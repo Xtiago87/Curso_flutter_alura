@@ -4,35 +4,36 @@ import 'package:bytebank_sqlite/database/dao/contact_dao.dart';
 import 'package:bytebank_sqlite/models/contact.dart';
 import 'package:bytebank_sqlite/screens/contact_form.dart';
 import 'package:bytebank_sqlite/screens/transaction_form.dart';
+import 'package:bytebank_sqlite/widgets/app_dependency.dart';
 import 'package:flutter/material.dart';
 
 class ContactsList extends StatefulWidget {
+
   @override
   _ContactsListState createState() => _ContactsListState();
 }
 
 class _ContactsListState extends State<ContactsList> {
-  final ContactDao _dao = ContactDao();
-
   @override
   Widget build(BuildContext context) {
+    final dependencies = AppDependencies.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Contacts"),
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: [],
-        future: _dao.findAll(),
+        future: dependencies!.contactDao.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none: //ainda n foi executado
-            // TODO: Handle this case.
+              // TODO: Handle this case.
               break;
             case ConnectionState.waiting:
               Progress("Loading");
               break;
             case ConnectionState.active:
-            // TODO: Handle this case.
+              // TODO: Handle this case.
               break;
             case ConnectionState.done:
               final List<Contact>? contacts = snapshot
@@ -42,13 +43,11 @@ class _ContactsListState extends State<ContactsList> {
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     final Contact contact = contacts[index];
-                    return _ContactItem(
+                    return ContactItem(
                       contact,
                       onClick: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) =>
-                            TransactionForm(contact))
-                        );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => TransactionForm(contact)));
                       },
                     );
                   },
@@ -64,7 +63,8 @@ class _ContactsListState extends State<ContactsList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ContactForm()))
+              .push(MaterialPageRoute(
+                  builder: (context) => ContactForm()))
               .then((newContact) {
             setState(() {});
             debugPrint(newContact.toString());
@@ -76,11 +76,11 @@ class _ContactsListState extends State<ContactsList> {
   }
 }
 
-class _ContactItem extends StatelessWidget {
+class ContactItem extends StatelessWidget {
   final Contact contact;
   final Function onClick;
 
-  _ContactItem(this.contact, {required this.onClick});
+  ContactItem(this.contact, {required this.onClick});
 
   @override
   Widget build(BuildContext context) {
